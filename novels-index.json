@@ -1,9 +1,10 @@
 {
   "site": {
     "title": "チラシの裏",
-    "description": "書きかけの小説を不定期配信します"
+    "description": "書きかけの小説を不定期配信します",
+    "ga_id": "G-DVNBBEB8JJ"
   },
-  "generated_at": "2026-02-28T15:43:17.970818+00:00",
+  "generated_at": "2026-02-28T16:40:53.160999+00:00",
   "novels": [
     {
       "owner": "miyanomoridaigo",
