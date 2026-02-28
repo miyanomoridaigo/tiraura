@@ -1,0 +1,26 @@
+name: Notify Main Site on Push
+
+on:
+  push:
+    branches:
+      - main
+      - master
+
+jobs:
+  notify:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: メインサイトの更新をトリガー
+        run: |
+          curl -s -o /dev/null -w "%{http_code}" \
+            -X POST \
+            -H "Authorization: Bearer ${{ secrets.MAIN_SITE_TOKEN }}" \
+            -H "Accept: application/vnd.github.v3+json" \
+            -H "Content-Type: application/json" \
+            https://api.github.com/repos/${{ secrets.MAIN_SITE_OWNER }}/${{ secrets.MAIN_SITE_REPO }}/dispatches \
+            -d "{\"event_type\": \"novel-updated\", \"client_payload\": {\"repo\": \"${{ github.repository }}\", \"ref\": \"${{ github.ref }}\"}}"
+        # 注意: 以下の Secrets を小説リポジトリに設定してください
+        # MAIN_SITE_TOKEN  : メインサイトリポジトリへの write 権限を持つ PAT
+        # MAIN_SITE_OWNER  : メインサイトの GitHub ユーザー名 (例: daigo)
+        # MAIN_SITE_REPO   : メインサイトのリポジトリ名 (例: web-novel-site)

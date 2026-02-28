@@ -1,0 +1,27 @@
+{
+  "site": {
+    "title": "チラシの裏",
+    "description": "書きかけの小説を不定期配信します"
+  },
+  "generated_at": "2026-02-28T08:09:40.251032+00:00",
+  "novels": [
+    {
+      "owner": "miyanomoridaigo",
+      "repo": "novel1",
+      "branch": "main",
+      "title": "異世界冒険記",
+      "description": "平凡な高校生がある日突然異世界に転移して...",
+      "author": "あなたの名前",
+      "tags": [
+        "異世界転移",
+        "ファンタジー",
+        "冒険"
+      ],
+      "cover": "https://example.com/cover.jpg",
+      "status": "連載中",
+      "created_at": "2025-01-01",
+      "updated_at": "2026-02-28T05:10:38Z",
+      "chapter_count": 11
+    }
+  ]
+}

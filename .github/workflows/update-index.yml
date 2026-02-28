@@ -1,0 +1,44 @@
+name: Update Novel Index
+
+on:
+  # 小説リポジトリから repository_dispatch イベントで呼び出される
+  repository_dispatch:
+    types: [novel-updated]
+
+  # 手動実行
+  workflow_dispatch:
+
+  # 毎日 0:00 JST (15:00 UTC) に自動更新（フォールバック）
+  schedule:
+    - cron: '0 15 * * *'
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write   # novels-index.json をコミットするために必要
+
+    steps:
+      - name: リポジトリをチェックアウト
+        uses: actions/checkout@v4
+
+      - name: Python セットアップ
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+
+      - name: 依存パッケージをインストール
+        run: pip install requests
+
+      - name: インデックスを生成
+        run: python scripts/build_index.py
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: 変更をコミット & プッシュ
+        run: |
+          git config --local user.email "github-actions[bot]@users.noreply.github.com"
+          git config --local user.name "github-actions[bot]"
+          git add novels-index.json
+          git diff --staged --quiet || git commit -m "chore: update novels-index.json [skip ci]"
+          git push

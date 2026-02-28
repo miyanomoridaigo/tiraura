@@ -1,0 +1,497 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Web小説サイト</title>
+  <style>
+    :root {
+      --bg: #0f0f13;
+      --bg2: #1a1a22;
+      --bg3: #22222e;
+      --border: #2e2e3e;
+      --text: #e8e8f0;
+      --text2: #9999b0;
+      --accent: #c8a96e;
+      --accent2: #e0c088;
+      --tag-bg: #2a2a3a;
+      --tag-text: #a0a0c0;
+      --card-hover: #20202c;
+      --search-bg: #1e1e28;
+    }
+    [data-theme="light"] {
+      --bg: #f5f5f0;
+      --bg2: #ffffff;
+      --bg3: #eeeeea;
+      --border: #ddddd5;
+      --text: #1a1a2e;
+      --text2: #666680;
+      --accent: #8b6914;
+      --accent2: #a07a20;
+      --tag-bg: #e8e8f0;
+      --tag-text: #4a4a6a;
+      --card-hover: #f0f0eb;
+      --search-bg: #f0f0ec;
+    }
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      background: var(--bg);
+      color: var(--text);
+      font-family: 'Hiragino Kaku Gothic ProN', 'Noto Sans JP', sans-serif;
+      min-height: 100vh;
+      line-height: 1.6;
+    }
+    header {
+      background: var(--bg2);
+      border-bottom: 1px solid var(--border);
+      padding: 16px 24px;
+      position: sticky;
+      top: 0;
+      z-index: 100;
+      display: flex;
+      align-items: center;
+      gap: 16px;
+    }
+    .site-title {
+      font-size: 1.3rem;
+      font-weight: 700;
+      color: var(--accent);
+      text-decoration: none;
+      white-space: nowrap;
+      letter-spacing: 0.02em;
+    }
+    .search-wrap {
+      flex: 1;
+      max-width: 500px;
+      position: relative;
+    }
+    .search-input {
+      width: 100%;
+      padding: 9px 16px 9px 40px;
+      background: var(--search-bg);
+      border: 1px solid var(--border);
+      border-radius: 24px;
+      color: var(--text);
+      font-size: 0.95rem;
+      outline: none;
+      transition: border-color 0.2s;
+    }
+    .search-input:focus { border-color: var(--accent); }
+    .search-icon {
+      position: absolute;
+      left: 13px;
+      top: 50%;
+      transform: translateY(-50%);
+      color: var(--text2);
+      font-size: 1rem;
+    }
+    .header-right {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      margin-left: auto;
+    }
+    .theme-btn {
+      background: var(--bg3);
+      border: 1px solid var(--border);
+      color: var(--text);
+      border-radius: 8px;
+      padding: 7px 10px;
+      cursor: pointer;
+      font-size: 1rem;
+      transition: background 0.2s;
+    }
+    .theme-btn:hover { background: var(--border); }
+    main {
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 28px 20px;
+    }
+    .section-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 16px;
+    }
+    .section-title {
+      font-size: 0.8rem;
+      font-weight: 600;
+      color: var(--text2);
+      text-transform: uppercase;
+      letter-spacing: 0.1em;
+    }
+    /* Tag filters */
+    .tag-section { margin-bottom: 24px; }
+    .tag-list {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+    }
+    .tag-chip {
+      padding: 5px 14px;
+      border-radius: 20px;
+      background: var(--tag-bg);
+      color: var(--tag-text);
+      font-size: 0.82rem;
+      cursor: pointer;
+      border: 1px solid transparent;
+      transition: all 0.15s;
+      user-select: none;
+    }
+    .tag-chip:hover { border-color: var(--accent); color: var(--accent); }
+    .tag-chip.active { background: var(--accent); color: #fff; border-color: var(--accent); }
+    /* Sort */
+    .sort-select {
+      background: var(--bg3);
+      border: 1px solid var(--border);
+      color: var(--text);
+      border-radius: 8px;
+      padding: 6px 10px;
+      font-size: 0.85rem;
+      cursor: pointer;
+      outline: none;
+    }
+    /* Novel grid */
+    .novel-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+      gap: 20px;
+    }
+    .novel-card {
+      background: var(--bg2);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      overflow: hidden;
+      cursor: pointer;
+      transition: transform 0.2s, border-color 0.2s, box-shadow 0.2s;
+      text-decoration: none;
+      color: inherit;
+      display: flex;
+      flex-direction: column;
+    }
+    .novel-card:hover {
+      transform: translateY(-3px);
+      border-color: var(--accent);
+      box-shadow: 0 8px 24px rgba(0,0,0,0.3);
+    }
+    .card-cover {
+      width: 100%;
+      height: 140px;
+      object-fit: cover;
+      background: linear-gradient(135deg, var(--bg3) 0%, var(--border) 100%);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 3rem;
+      flex-shrink: 0;
+    }
+    .card-body {
+      padding: 16px;
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+    }
+    .card-title {
+      font-size: 1.0rem;
+      font-weight: 700;
+      margin-bottom: 6px;
+      color: var(--text);
+      line-height: 1.4;
+      display: -webkit-box;
+      -webkit-line-clamp: 2;
+      -webkit-box-orient: vertical;
+      overflow: hidden;
+    }
+    .card-author {
+      font-size: 0.8rem;
+      color: var(--text2);
+      margin-bottom: 8px;
+    }
+    .card-desc {
+      font-size: 0.85rem;
+      color: var(--text2);
+      line-height: 1.5;
+      margin-bottom: 10px;
+      flex: 1;
+      display: -webkit-box;
+      -webkit-line-clamp: 3;
+      -webkit-box-orient: vertical;
+      overflow: hidden;
+    }
+    .card-tags {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 5px;
+      margin-bottom: 10px;
+    }
+    .card-tag {
+      padding: 2px 8px;
+      border-radius: 12px;
+      background: var(--tag-bg);
+      color: var(--tag-text);
+      font-size: 0.75rem;
+    }
+    .card-footer {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      border-top: 1px solid var(--border);
+      padding-top: 10px;
+      font-size: 0.8rem;
+      color: var(--text2);
+    }
+    .status-badge {
+      padding: 2px 8px;
+      border-radius: 10px;
+      font-size: 0.75rem;
+    }
+    .status-ongoing { background: #1a3a2a; color: #4ade80; }
+    .status-completed { background: #1a2a3a; color: #60a5fa; }
+    .status-hiatus { background: #3a2a1a; color: #f59e0b; }
+    /* Empty state */
+    .empty-state {
+      text-align: center;
+      padding: 60px 20px;
+      color: var(--text2);
+    }
+    .empty-state h2 { font-size: 1.2rem; margin-bottom: 8px; }
+    /* Loading */
+    .loading {
+      text-align: center;
+      padding: 60px;
+      color: var(--text2);
+    }
+    .spinner {
+      width: 40px;
+      height: 40px;
+      border: 3px solid var(--border);
+      border-top-color: var(--accent);
+      border-radius: 50%;
+      animation: spin 0.8s linear infinite;
+      margin: 0 auto 16px;
+    }
+    @keyframes spin { to { transform: rotate(360deg); } }
+    .results-count {
+      font-size: 0.82rem;
+      color: var(--text2);
+    }
+    /* Search highlight */
+    mark {
+      background: rgba(200, 169, 110, 0.3);
+      color: var(--accent2);
+      border-radius: 2px;
+    }
+    @media (max-width: 600px) {
+      header { flex-wrap: wrap; }
+      .search-wrap { order: 3; flex: 0 0 100%; max-width: 100%; }
+      .novel-grid { grid-template-columns: 1fr; }
+    }
+  </style>
+</head>
+<body>
+<header>
+  <a href="index.html" class="site-title" id="siteTitle">📖 Web小説</a>
+  <div class="search-wrap">
+    <span class="search-icon">🔍</span>
+    <input type="text" class="search-input" id="searchInput" placeholder="タイトル・説明文・タグを検索...">
+  </div>
+  <div class="header-right">
+    <button class="theme-btn" id="themeBtn" title="テーマ切替">🌙</button>
+  </div>
+</header>
+
+<main>
+  <div class="tag-section">
+    <div class="section-header">
+      <span class="section-title">タグで絞り込み</span>
+      <button class="tag-chip" id="clearTagsBtn" style="display:none">✕ クリア</button>
+    </div>
+    <div class="tag-list" id="tagList">
+      <span class="tag-chip" style="color:var(--text2);cursor:default">読み込み中...</span>
+    </div>
+  </div>
+
+  <div class="section-header">
+    <span class="results-count" id="resultsCount"></span>
+    <select class="sort-select" id="sortSelect">
+      <option value="updated">更新日順</option>
+      <option value="title">タイトル順</option>
+      <option value="chapters">話数順</option>
+      <option value="created">投稿日順</option>
+    </select>
+  </div>
+
+  <div id="novelGrid" class="novel-grid">
+    <div class="loading">
+      <div class="spinner"></div>
+      <p>小説一覧を読み込んでいます...</p>
+    </div>
+  </div>
+</main>
+
+<script>
+  // ===== Theme =====
+  const savedTheme = localStorage.getItem('theme') || 'dark';
+  document.documentElement.setAttribute('data-theme', savedTheme);
+  const themeBtn = document.getElementById('themeBtn');
+  themeBtn.textContent = savedTheme === 'dark' ? '☀️' : '🌙';
+  themeBtn.addEventListener('click', () => {
+    const cur = document.documentElement.getAttribute('data-theme');
+    const next = cur === 'dark' ? 'light' : 'dark';
+    document.documentElement.setAttribute('data-theme', next);
+    localStorage.setItem('theme', next);
+    themeBtn.textContent = next === 'dark' ? '☀️' : '🌙';
+  });
+
+  // ===== Data =====
+  let allNovels = [];
+  let activeTags = new Set();
+  let searchQuery = '';
+  let sortMode = 'updated';
+
+  async function loadNovels() {
+    try {
+      const res = await fetch('novels-index.json?' + Date.now());
+      const data = await res.json();
+      // Site title from config
+      if (data.site && data.site.title) {
+        document.title = data.site.title;
+        document.getElementById('siteTitle').textContent = '📖 ' + data.site.title;
+      }
+      allNovels = data.novels || [];
+      renderTagList();
+      renderNovels();
+    } catch (e) {
+      document.getElementById('novelGrid').innerHTML = `
+        <div class="empty-state">
+          <h2>⚠️ 読み込みエラー</h2>
+          <p>novels-index.json が見つかりません。<br>GitHub Actions を実行してインデックスを生成してください。</p>
+        </div>`;
+    }
+  }
+
+  function getAllTags() {
+    const tagCount = {};
+    allNovels.forEach(n => {
+      (n.tags || []).forEach(t => { tagCount[t] = (tagCount[t] || 0) + 1; });
+    });
+    return Object.entries(tagCount).sort((a, b) => b[1] - a[1]);
+  }
+
+  function renderTagList() {
+    const tags = getAllTags();
+    const container = document.getElementById('tagList');
+    if (tags.length === 0) { container.innerHTML = '<span style="color:var(--text2);font-size:0.85rem">タグなし</span>'; return; }
+    container.innerHTML = tags.map(([tag, count]) =>
+      `<span class="tag-chip${activeTags.has(tag) ? ' active' : ''}" data-tag="${tag}">${tag} <small>(${count})</small></span>`
+    ).join('');
+    container.querySelectorAll('.tag-chip[data-tag]').forEach(el => {
+      el.addEventListener('click', () => {
+        const t = el.getAttribute('data-tag');
+        if (activeTags.has(t)) activeTags.delete(t); else activeTags.add(t);
+        renderTagList();
+        renderNovels();
+        document.getElementById('clearTagsBtn').style.display = activeTags.size ? 'inline-block' : 'none';
+      });
+    });
+  }
+
+  document.getElementById('clearTagsBtn').addEventListener('click', () => {
+    activeTags.clear();
+    renderTagList();
+    renderNovels();
+    document.getElementById('clearTagsBtn').style.display = 'none';
+  });
+
+  function highlight(text, query) {
+    if (!query || !text) return text || '';
+    const escaped = query.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+    return String(text).replace(new RegExp(`(${escaped})`, 'gi'), '<mark>$1</mark>');
+  }
+
+  function filterNovels() {
+    let novels = [...allNovels];
+    // Tag filter (AND)
+    if (activeTags.size > 0) {
+      novels = novels.filter(n => [...activeTags].every(t => (n.tags || []).includes(t)));
+    }
+    // Search
+    if (searchQuery) {
+      const q = searchQuery.toLowerCase();
+      novels = novels.filter(n =>
+        (n.title || '').toLowerCase().includes(q) ||
+        (n.description || '').toLowerCase().includes(q) ||
+        (n.author || '').toLowerCase().includes(q) ||
+        (n.tags || []).some(t => t.toLowerCase().includes(q))
+      );
+    }
+    // Sort
+    if (sortMode === 'title') novels.sort((a, b) => (a.title || '').localeCompare(b.title || '', 'ja'));
+    else if (sortMode === 'chapters') novels.sort((a, b) => (b.chapter_count || 0) - (a.chapter_count || 0));
+    else if (sortMode === 'created') novels.sort((a, b) => (b.created_at || '') < (a.created_at || '') ? -1 : 1);
+    else novels.sort((a, b) => (b.updated_at || '') < (a.updated_at || '') ? -1 : 1); // updated
+    return novels;
+  }
+
+  function statusLabel(status) {
+    if (!status) return '';
+    const map = { '連載中': 'ongoing', '完結': 'completed', '休止中': 'hiatus' };
+    const cls = map[status] || 'ongoing';
+    return `<span class="status-badge status-${cls}">${status}</span>`;
+  }
+
+  function renderNovels() {
+    const novels = filterNovels();
+    const q = searchQuery;
+    const grid = document.getElementById('novelGrid');
+    document.getElementById('resultsCount').textContent = `${novels.length} 作品`;
+
+    if (novels.length === 0) {
+      grid.innerHTML = `<div class="empty-state"><h2>📭 該当する小説がありません</h2><p>検索条件を変えてみてください。</p></div>`;
+      return;
+    }
+
+    grid.innerHTML = novels.map(n => {
+      const readerUrl = `reader.html?owner=${encodeURIComponent(n.owner)}&repo=${encodeURIComponent(n.repo)}&branch=${encodeURIComponent(n.branch || 'main')}&chapter=1`;
+      const coverStyle = n.cover
+        ? `<img src="${n.cover}" alt="cover" class="card-cover" onerror="this.outerHTML='<div class=card-cover>📚</div>'">`
+        : `<div class="card-cover">📚</div>`;
+      const tags = (n.tags || []).map(t => `<span class="card-tag">${highlight(t, q)}</span>`).join('');
+      const date = n.updated_at ? new Date(n.updated_at).toLocaleDateString('ja-JP') : '';
+      return `
+        <a href="${readerUrl}" class="novel-card">
+          ${coverStyle}
+          <div class="card-body">
+            <div class="card-title">${highlight(n.title, q) || '（タイトルなし）'}</div>
+            <div class="card-author">作者：${highlight(n.author, q) || '不明'}</div>
+            <div class="card-desc">${highlight(n.description, q) || ''}</div>
+            ${tags ? `<div class="card-tags">${tags}</div>` : ''}
+            <div class="card-footer">
+              <span>${n.chapter_count || 0} 話</span>
+              ${statusLabel(n.status)}
+              <span>${date}</span>
+            </div>
+          </div>
+        </a>`;
+    }).join('');
+  }
+
+  // ===== Events =====
+  let searchTimer;
+  document.getElementById('searchInput').addEventListener('input', e => {
+    clearTimeout(searchTimer);
+    searchTimer = setTimeout(() => {
+      searchQuery = e.target.value.trim();
+      renderNovels();
+    }, 200);
+  });
+
+  document.getElementById('sortSelect').addEventListener('change', e => {
+    sortMode = e.target.value;
+    renderNovels();
+  });
+
+  loadNovels();
+</script>
+</body>
+</html>

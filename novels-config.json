@@ -1,0 +1,13 @@
+{
+  "site": {
+    "title": "チラシの裏",
+    "description": "書きかけの小説を不定期配信します"
+  },
+  "repositories": [
+    {
+      "owner": "miyanomoridaigo",
+      "repo": "https://github.com/miyanomoridaigo/novel1.git",
+      "branch": "main"
+    }
+  ]
+}
