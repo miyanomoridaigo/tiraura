@@ -6,11 +6,6 @@
   "repositories": [
     {
       "owner": "miyanomoridaigo",
-      "repo": "https://github.com/miyanomoridaigo/novel1.git",
-      "branch": "main"
-    },
-    {
-      "owner": "miyanomoridaigo",
       "repo": "https://github.com/miyanomoridaigo/nocturnal-vice-novel.git",
       "branch": "main"
     }
