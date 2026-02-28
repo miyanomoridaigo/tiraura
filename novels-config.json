@@ -1,7 +1,8 @@
 {
   "site": {
     "title": "チラシの裏",
-    "description": "書きかけの小説を不定期配信します"
+    "description": "書きかけの小説を不定期配信します",
+    "ga_id": "G-DVNBBEB8JJ"
   },
   "repositories": [
     {

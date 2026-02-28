@@ -288,14 +288,6 @@
     }
   </style>
 </head>
-<script async src="https://www.googletagmanager.com/gtag/js?id=G-DVNBBEB8JJ"></script>
-<script>
-  window.dataLayer = window.dataLayer || [];
-  function gtag(){dataLayer.push(arguments);}
-  gtag('js', new Date());
-
-  gtag('config', 'G-DVNBBEB8JJ');
-</script>
 <body>
 <header>
   <a href="index.html" class="site-title" id="siteTitle">📖 Web小説</a>
@@ -351,6 +343,21 @@
     themeBtn.textContent = next === 'dark' ? '☀️' : '🌙';
   });
 
+  // ===== Google Analytics =====
+  function injectGA(gaId) {
+    if (!gaId || document.getElementById('ga-script')) return;
+    const s1 = document.createElement('script');
+    s1.id = 'ga-script';
+    s1.async = true;
+    s1.src = 'https://www.googletagmanager.com/gtag/js?id=' + gaId;
+    document.head.appendChild(s1);
+    window.dataLayer = window.dataLayer || [];
+    function gtag(){ dataLayer.push(arguments); }
+    window.gtag = gtag;
+    gtag('js', new Date());
+    gtag('config', gaId);
+  }
+
   // ===== Data =====
   let allNovels = [];
   let activeTags = new Set();
@@ -365,6 +372,9 @@
       if (data.site && data.site.title) {
         document.title = data.site.title;
         document.getElementById('siteTitle').textContent = '📖 ' + data.site.title;
+      }
+      if (data.site && data.site.ga_id) {
+        injectGA(data.site.ga_id);
       }
       allNovels = data.novels || [];
       renderTagList();

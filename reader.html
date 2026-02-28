@@ -345,14 +345,6 @@
     .sidebar-overlay.visible { display: block; }
   </style>
 </head>
-<script async src="https://www.googletagmanager.com/gtag/js?id=G-DVNBBEB8JJ"></script>
-<script>
-  window.dataLayer = window.dataLayer || [];
-  function gtag(){dataLayer.push(arguments);}
-  gtag('js', new Date());
-
-  gtag('config', 'G-DVNBBEB8JJ');
-</script>
 <body>
 <header>
   <a href="index.html" class="home-btn" title="一覧に戻る">🏠</a>
@@ -478,6 +470,21 @@
     el.addEventListener('click', () => { theme = el.dataset.theme; applySettings(); });
   });
 
+  // ===== Google Analytics =====
+  function injectGA(gaId) {
+    if (!gaId || document.getElementById('ga-script')) return;
+    const s1 = document.createElement('script');
+    s1.id = 'ga-script';
+    s1.async = true;
+    s1.src = 'https://www.googletagmanager.com/gtag/js?id=' + gaId;
+    document.head.appendChild(s1);
+    window.dataLayer = window.dataLayer || [];
+    function gtag(){ dataLayer.push(arguments); }
+    window.gtag = gtag;
+    gtag('js', new Date());
+    gtag('config', gaId);
+  }
+
   // ===== Novel data =====
   let novelMeta = null;
   let chapterCount = 0;
@@ -501,6 +508,9 @@
       const r2 = await fetch('novels-index.json');
       if (r2.ok) {
         const idx = await r2.json();
+        if (idx.site && idx.site.ga_id) {
+          injectGA(idx.site.ga_id);
+        }
         const found = (idx.novels || []).find(n => n.owner === OWNER && n.repo === REPO);
         if (found) {
           if (!novelMeta) novelMeta = found;
