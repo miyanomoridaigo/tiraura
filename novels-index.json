@@ -4,7 +4,7 @@
     "description": "書きかけの小説を不定期配信します",
     "ga_id": "G-DVNBBEB8JJ"
   },
-  "generated_at": "2026-03-27T18:03:25.076015+00:00",
+  "generated_at": "2026-03-28T14:13:14.018644+00:00",
   "novels": [
     {
       "owner": "miyanomoridaigo",
@@ -41,6 +41,24 @@
       "created_at": "2026-03-01",
       "updated_at": "2026-02-28T23:37:20Z",
       "chapter_count": 2
+    },
+    {
+      "owner": "miyanomoridaigo",
+      "repo": "dark-empire",
+      "branch": "main",
+      "title": "闇の皇国",
+      "description": "常闇の皇国の滅亡までを描いたダークファンタジー",
+      "author": "宮之森大悟",
+      "tags": [
+        "ファンタジー",
+        "ハイファンタジー",
+        "ダークファンタジー"
+      ],
+      "cover": "https://example.com/cover.jpg",
+      "status": "連載中",
+      "created_at": "2026-03-28",
+      "updated_at": "2026-03-28T14:12:52Z",
+      "chapter_count": 1
     }
   ]
 }
