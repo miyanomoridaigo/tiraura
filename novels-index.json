@@ -4,7 +4,7 @@
     "description": "書きかけの小説を不定期配信します",
     "ga_id": "G-DVNBBEB8JJ"
   },
-  "generated_at": "2026-03-29T15:59:54.599015+00:00",
+  "generated_at": "2026-03-30T14:47:17.360426+00:00",
   "novels": [
     {
       "owner": "miyanomoridaigo",
@@ -57,7 +57,7 @@
       "cover": "https://example.com/cover.jpg",
       "status": "連載中",
       "created_at": "2026-03-28",
-      "updated_at": "2026-03-28T23:05:20Z",
+      "updated_at": "2026-03-30T14:46:45Z",
       "chapter_count": 1
     }
   ]
