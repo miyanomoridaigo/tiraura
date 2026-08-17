@@ -4,24 +4,19 @@
     "description": "書きかけの小説を不定期配信します",
     "ga_id": "G-DVNBBEB8JJ"
   },
-  "generated_at": "2026-08-16T15:26:17.365145+00:00",
+  "generated_at": "2026-08-17T15:30:31.777708+00:00",
   "novels": [
     {
       "owner": "miyanomoridaigo",
       "repo": "nocturnal-vice-novel",
       "branch": "main",
-      "title": "ノクターナル・ヴァイス",
-      "description": "マジックパンクＳＦ",
-      "author": "宮之森大悟",
-      "tags": [
-        "ＳＦ",
-        "SF",
-        "マジックパンク",
-        "近未来"
-      ],
-      "cover": "https://example.com/cover.jpg",
+      "title": "nocturnal-vice-novel",
+      "description": "",
+      "author": "miyanomoridaigo",
+      "tags": [],
+      "cover": "",
       "status": "連載中",
-      "created_at": "2026-02-28",
+      "created_at": "",
       "updated_at": "2026-02-28T12:17:15Z",
       "chapter_count": 2
     },
@@ -29,16 +24,13 @@
       "owner": "miyanomoridaigo",
       "repo": "chronicle-of-ruin",
       "branch": "main",
-      "title": "滅びのクロニクル",
-      "description": "その力があれば、世界は救われるはずだった。",
-      "author": "宮之森大悟",
-      "tags": [
-        "ファンタジー",
-        "ダークファンタジー"
-      ],
-      "cover": "https://example.com/cover.jpg",
+      "title": "chronicle-of-ruin",
+      "description": "",
+      "author": "miyanomoridaigo",
+      "tags": [],
+      "cover": "",
       "status": "連載中",
-      "created_at": "2026-03-01",
+      "created_at": "",
       "updated_at": "2026-02-28T23:37:20Z",
       "chapter_count": 2
     },
